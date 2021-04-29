@@ -1,10 +1,5 @@
 package primitives;
 
-/**
- * basic Point for RayTracing project in 3D
- *
- * @author Eliezer
- */
 public class Point3D {
     final Coordinate _x;
     final Coordinate _y;
