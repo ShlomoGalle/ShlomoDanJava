@@ -5,7 +5,7 @@ public class Point3D {
     final Coordinate _y;
     final Coordinate _z;
 
-    //static Point3D for origin point (0,0,0)
+    //static Point3D for origin point (0,0,0) 
     public final static Point3D ZERO = new Point3D(0d, 0d, 0d);
 
     /**

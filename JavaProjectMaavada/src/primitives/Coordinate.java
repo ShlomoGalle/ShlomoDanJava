@@ -3,7 +3,7 @@ package primitives;
 import static primitives.Util.*;
 
 public final class Coordinate {
-    /**
+    /** 
      * Coordinate value, intentionally "package-friendly" due to performance
      * constraints
      */
