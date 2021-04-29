@@ -46,15 +46,7 @@ public class Cylinder extends Tube {   // implements Geometry
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-//        //todo rethink the all thing
-//        List<Point3D> result = super.findIntersections(ray);
-//        if(result != null){
-//            Point3D p = result.get(0);
-//            Vector v = p.subtract(_axis.getP0());
-//           //todo
-//        }
-//        //todo do the caps
-//        return result;
+
 
         Vector vAxis = _axis.getDirection();
         Vector v = ray.getDirection();

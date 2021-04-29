@@ -46,12 +46,7 @@ public class Tube  extends RadialGeometry {
         return n;
     }
 
-    /**
-     * implemented by Dan zilberstein
-     *
-     * @param ray ray intersecting with the tube
-     * @return intersection points
-     */
+
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         Vector vAxis = _axis.getDirection();
