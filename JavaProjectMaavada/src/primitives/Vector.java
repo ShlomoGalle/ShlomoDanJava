@@ -3,19 +3,11 @@ package primitives;
 import static primitives.Point3D.ZERO;
 import static primitives.Util.isZero;
 
-/**
- * Vector in 3D for RayTracing
- *
- * @author Eliezer
- */
+
 public class Vector {
     Point3D _head;
 
-    /**
-     * primary  constructor for Vector class
-     *
-     * @param head head of vector starting from origin Point(0.0.0)
-     */
+    
     public Vector(Point3D head) {
         if (head.equals(ZERO)) {
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");
@@ -23,13 +15,7 @@ public class Vector {
         _head = head;
     }
 
-    /**
-     * constructor for Vector class
-     *
-     * @param x value for X Coordinate of the head Point
-     * @param y value for Y Coordinate of the head Point
-     * @param z value for Z Coordinate of the head Point
-     */
+    
     public Vector(double x, double y, double z) {
         this(new Point3D(x, y, z));
     }
@@ -47,22 +33,13 @@ public class Vector {
         return "{" + _head + '}';
     }
 
-    /**
-     * get accessor for head Point
-     *
-     * @return a new Point3D corresponding to the head
-     */
+
     public Point3D getHead() {
         //return _head;
         return new Point3D(_head._x._coord, _head._y._coord, _head._z._coord);
     }
 
-    /**
-     * dot product between two vectors (scalar product)
-     *
-     * @param v the right vector of U.V
-     * @return scalre value of dot product
-     */
+
     public double dotProduct(Vector v) {
         double u1 = _head._x._coord;
         double u2 = _head._y._coord;
@@ -76,13 +53,7 @@ public class Vector {
 
     }
 
-    /**
-     * Cross product (vectorial product)
-     *
-     * @param v second vector
-     * @return new Vector resulting from cross product
-     * @link https://en.wikipedia.org/wiki/Cross_product
-     */
+
     public Vector crossProduct(Vector v) {
         double u1 = _head._x._coord;
         double u2 = _head._y._coord;
@@ -98,16 +69,12 @@ public class Vector {
         ));
     }
 
-    /**
-     * @return length using Pythagoras
-     */
+
     public double length() {
         return Math.sqrt(lengthSquared());
     }
 
-    /**
-     * @return euclidean length squared of the vector
-     */
+
     public double lengthSquared() {
         double u1 = _head._x._coord;
         double u2 = _head._y._coord;
@@ -117,22 +84,14 @@ public class Vector {
     }
 
 
-    /**
-     * creating a new Vector corresponding to the current values normalized
-     *
-     * @return new Vector normalized
-     */
+
     public Vector normalized() {
         Vector result = new Vector(_head);
         result.normalize();
         return result;
     }
 
-    /**
-     * normalizing the current Vector
-     *
-     * @return this Vector normalized
-     */
+
     public Vector normalize() {
         double length = this.length();
 
@@ -151,10 +110,7 @@ public class Vector {
         return this;
     }
 
-    /**
-     * @param v Vector
-     * @return new Vector (u+v)
-     */
+
     public Vector add(Vector v) {
         double x = _head._x._coord + v._head._x._coord;
         double y = _head._y._coord + v._head._y._coord;
@@ -163,10 +119,7 @@ public class Vector {
         return new Vector(new Point3D(x, y, z));
     }
 
-    /**
-     * @param v Vector
-     * @return new Vector(u-v)
-     */
+
     public Vector subtract(Vector v) {
         double x = _head._x._coord - v._head._x._coord;
         double y = _head._y._coord - v._head._y._coord;
@@ -175,12 +128,7 @@ public class Vector {
         return new Vector(new Point3D(x, y, z));
     }
 
-    /**
-     * creating a new Vector corresponding to the actual one
-     * scaled by scaling factor
-     *
-     * @param scalar scaling factot
-     */
+
     public Vector scale(double scalar) {
         if (isZero(scalar)) {
             throw new IllegalArgumentException("scaling factor == 0");
@@ -192,12 +140,7 @@ public class Vector {
                         scalar * _head._z._coord));
     }
 
-    /**
-     * @param axis axis of rotation
-     * @param theta angle of rotation
-     *
-     * @author Yona Szmerla
-     */
+   
     public void rotateVector(Vector axis, double theta) {
         double x = this._head.getX();
         double y = this._head.getY();

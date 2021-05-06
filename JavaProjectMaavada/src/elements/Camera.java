@@ -76,14 +76,6 @@ public class Camera {
 
     }
 
-    /**
-     * added by @author Yona Szmerla
-     *
-     * @param up    delta for _vUp vector
-     * @param right delta for _vRight vector
-     * @param to    delta for _vTo vector
-     * @return
-     */
     public Camera moveCamera(double up, double right, double to) {
         if (up == 0 && right == 0 && to == 0) return this;
         if (up != 0) this._p0.add(_vUp.scale(up));
@@ -92,13 +84,7 @@ public class Camera {
         return this;
     }
 
-    /**
-     * added by @author Yona Szmerla
-     *
-     * @param axis  turning axis
-     * @param theta angle to turn the camera
-     * @return
-     */
+
     public Camera turnCamera(Vector axis, double theta) {
         if (theta == 0) return this;
         this._vUp.rotateVector(axis, theta);

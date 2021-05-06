@@ -20,11 +20,7 @@ public class Point3D {
         _z = new Coordinate(z);
     }
 
-    /**
-     *
-     * @param o Object (basicaly another Point3d) to compare
-     * @return true or false accordingly
-     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
