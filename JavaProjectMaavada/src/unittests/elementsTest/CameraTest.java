@@ -6,10 +6,19 @@ import org.junit.jupiter.api.Test;
 import elements.Camera;
 import primitives.*;
 
+/**
+ * Testing Camera Class
+ * 
+ * @author Dan
+ *
+ */
 import static org.junit.jupiter.api.Assertions.*;
 
 class CameraTest {
-
+	/**
+	 * Test method for
+	 * {@link elements.Camera#constructRayThroughPixel(int, int, int, int)}.
+	 */
 	@Test
     public void testConstructRayThroughPixel() {
         Camera camera = new Camera.BuilderCamera(Point3D.ZERO, new Vector(0, 0, 1), new Vector(0, -1, 0))
