@@ -15,7 +15,7 @@ public class Sphere extends RadialGeometry {
         super(radius);
         _center = center;
     }
-
+    
     public Point3D getCenter() {
         return _center;
     }
@@ -26,41 +26,37 @@ public class Sphere extends RadialGeometry {
         return p0_p.normalize();
     }
 
-    @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        Point3D P0 = ray.getP0();
-        Vector v = ray.getDirection();
 
-        if (P0.equals(_center)) {
-            return List.of(_center.add(v.scale(_radius)));
-        }
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
 
-        Vector U = _center.subtract(P0);
+	        Point3D p0 = ray.getP0();
+	        Point3D o = _center;
+	        Vector v = ray.getDirection();
+	        if (o.equals(p0)) {
+	            return List.of(new GeoPoint(this, p0.add(v.scale(_radius))));
+	        }
+	        Vector u = o.subtract(p0);
+	        double tm = v.dotProduct(u);
+	        double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
+	        if (d >= _radius) {
+	            return null;
+	        }
+	        double th = alignZero(Math.sqrt(_radius * _radius - d * d));
+	        double t1 = alignZero(tm - th);
+	        double t2 = alignZero(tm + th);
 
-        double tm = alignZero(v.dotProduct(U));
-        double d = alignZero(Math.sqrt(U.lengthSquared() - tm * tm));
+	        if (t1 > 0 && t2 > 0) {
+	            return (List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2))));
+	        }
+	        if (t1 > 0) {
 
-        if (d >= _radius) {
-            return null;
-        }
+	            return (List.of(new GeoPoint(this, ray.getPoint(t1))));
+	        }
+	        if (t2 > 0) {
 
-        double th = alignZero(Math.sqrt(_radius * _radius - d * d));
-        double t1 = alignZero(tm - th);
-        double t2 = alignZero(tm + th);
-
-        if (t1 > 0 && t2 > 0) {
-            Point3D P1 =ray.getPoint(t1);
-            Point3D P2 =ray.getPoint(t2);
-            return List.of(P1, P2);
-        }
-        if (t1 > 0) {
-            Point3D P1 =ray.getPoint(t1);
-            return List.of(P1);
-        }
-        if (t2 > 0) {
-            Point3D P2 =ray.getPoint(t2);
-            return List.of(P2);
-        }
-        return null;
-    }
+	            return (List.of(new GeoPoint(this, ray.getPoint(t2))));
+	        }
+	        return null;
+	}
 }

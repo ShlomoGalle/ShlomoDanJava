@@ -11,7 +11,16 @@ public class Triangle extends Polygon {  //implements Geometry
     }
 
     @Override
+    public String toString() {
+        return "Triangle{} " + super.toString();
+    }
+    
+    @Override
     public List<Point3D> findIntersections(Ray ray) {
         return super.findIntersections(ray);
+    }
+    
+    public List<GeoPoint> findGeoIntersections(Ray ray){
+        return super.findGeoIntersections(ray);
     }
 }

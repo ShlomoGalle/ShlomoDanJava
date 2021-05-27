@@ -9,7 +9,7 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane implements FlatGeometry {
+public class Plane extends Geometry {
 
     final Point3D _q0;
     final Vector _normal;
@@ -59,43 +59,45 @@ public class Plane implements FlatGeometry {
                 '}';
     }
 
-    @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        Point3D P0 = ray.getP0();
-        Vector v = ray.getDirection();
 
-        Vector n = _normal;
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		// TODO Auto-generated method stub
+		 Point3D P0 = ray.getP0();
+	        Vector v = ray.getDirection();
 
-        if(_q0.equals(P0)){
-            return  null;
-        }
+	        Vector n = _normal;
 
-        Vector P0_Q0 = _q0.subtract(P0);
+	        if(_q0.equals(P0)){
+	            return  null;
+	        }
 
-       //numerator
-        double nP0Q0  = alignZero(n.dotProduct(P0_Q0));
+	        Vector P0_Q0 = _q0.subtract(P0);
 
-        //
-        if (isZero(nP0Q0 )){
-            return null;
-        }
+	       //numerator
+	        double nP0Q0  = alignZero(n.dotProduct(P0_Q0));
 
-        //denominator
-        double nv = alignZero(n.dotProduct(v));
+	        //
+	        if (isZero(nP0Q0 )){
+	            return null;
+	        }
 
-        // ray is lying in the plane axis
-        if(isZero(nv)){
-            return null;
-        }
+	        //denominator
+	        double nv = alignZero(n.dotProduct(v));
 
-        double  t = alignZero(nP0Q0  / nv);
+	        // ray is lying in the plane axis
+	        if(isZero(nv)){
+	            return null;
+	        }
 
-        if (t <=0){
-            return  null;
-        }
+	        double  t = alignZero(nP0Q0  / nv);
 
-        Point3D point = ray.getPoint(t);
+	        if (t <=0){
+	            return  null;
+	        }
 
-        return List.of(point);
-    }
+	        Point3D point = ray.getPoint(t);
+
+	        return List.of(new GeoPoint(this, point));
+	}
 }
