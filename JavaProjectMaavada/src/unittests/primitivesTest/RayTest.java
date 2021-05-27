@@ -2,10 +2,13 @@ package unittests.primitivesTest;
 
 import org.junit.jupiter.api.Test;
 
-import primitives.*;
+import primitives.Point3D;
+import primitives.Ray;
 import primitives.Vector;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RayTest {

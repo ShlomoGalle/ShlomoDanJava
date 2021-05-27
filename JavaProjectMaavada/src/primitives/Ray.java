@@ -28,11 +28,7 @@ public class Ray {
         return _pOrigin.add(_direction.scale(delta));
     }
 
-    /**
-     * find the closest Point to Ray origin
-     * @param pointsList intersections point List
-     * @return closest point
-     */
+
     public Point3D findClosestPoint(List<Point3D> pointsList){
         Point3D result =null;
         double closestDistance = Double.MAX_VALUE;

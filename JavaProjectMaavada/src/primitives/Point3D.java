@@ -1,19 +1,15 @@
 package primitives;
 
+
 public class Point3D {
     final Coordinate _x;
     final Coordinate _y;
     final Coordinate _z;
 
-    //static Point3D for origin point (0,0,0) 
+    //static Point3D for origin point (0,0,0)
     public final static Point3D ZERO = new Point3D(0d, 0d, 0d);
 
-    /**
-     * primary constructor for Point3D
-     * @param x coordinate value for X axis
-     * @param y coordinate value for Y axis
-     * @param z coordinate value for Z axis
-     */
+
     public Point3D(double x, double y, double z) {
         _x = new Coordinate(x);
         _y = new Coordinate(y);
@@ -45,10 +41,7 @@ public class Point3D {
         return _z._coord;
     }
 
-    /**
-     * @param other
-     * @return (x2 - x1)^2 + (y2-y1)^2 + (z2-z1)^2
-     */
+
     public double distanceSquared(Point3D other) {
         final double x1 = _x._coord;
         final double y1 = _y._coord;
@@ -61,20 +54,12 @@ public class Point3D {
         return ((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)) + ((z2 - z1) * (z2 - z1));
     }
 
-    /**
-     * @param point3D
-     * @return euclidean distance between 2  3D points using the Pythagorean theorem
-     */
+
     public double distance(Point3D point3D) {
         return Math.sqrt(distanceSquared(point3D));
     }
 
-    /**
-     *
-     * @param pt2 Point3d from whom we create the Vector
-     *            pointing toward the actual Point3d instance
-     * @return
-     */
+
     public Vector subtract(Point3D pt2) {
         if (pt2.equals(this)) {
             throw new IllegalArgumentException("cannot create Vector to Point(0,0,0)");
@@ -94,3 +79,4 @@ public class Point3D {
     }
 
 }
+

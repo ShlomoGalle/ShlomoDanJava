@@ -6,7 +6,6 @@ import primitives.Vector;
 
 import static primitives.Util.isZero;
 
-
 public class Camera {
     final private Point3D _p0;
     final private Vector _vTo;
@@ -77,6 +76,7 @@ public class Camera {
 
     }
 
+
     public Camera moveCamera(double up, double right, double to) {
         if (up == 0 && right == 0 && to == 0) return this;
         if (up != 0) this._p0.add(_vUp.scale(up));
@@ -94,9 +94,7 @@ public class Camera {
         return this;
     }
 
-    /**
-     * Builder Class for Camera
-     */
+
     public static class BuilderCamera {
         final private Point3D _p0;
         final private Vector _vTo;
@@ -144,4 +142,3 @@ public class Camera {
     }
 
 }
-

@@ -25,7 +25,7 @@ public class Plane implements FlatGeometry {
         return _normal;
     }
 
- 
+    
     public Plane(Point3D p0, Vector normal) {
         _q0 = p0;
         _normal = normal.normalized();
@@ -34,9 +34,6 @@ public class Plane implements FlatGeometry {
 
     public Plane(Point3D p1, Point3D p2, Point3D p3) {
         _q0 = p1;
-//        //TODO check direction of vectors
-//        Vector U = p1.subtract(p2);
-//        Vector V = p3.subtract(p2);
 
         Vector U = p2.subtract(p1);
         Vector V = p3.subtract(p1);
@@ -45,7 +42,6 @@ public class Plane implements FlatGeometry {
 
         N.normalize();
 
-        //right hand rule
         _normal = N;
     }
 

@@ -7,7 +7,7 @@ import static primitives.Util.isZero;
 public class Vector {
     Point3D _head;
 
-    
+
     public Vector(Point3D head) {
         if (head.equals(ZERO)) {
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");
@@ -15,7 +15,7 @@ public class Vector {
         _head = head;
     }
 
-    
+
     public Vector(double x, double y, double z) {
         this(new Point3D(x, y, z));
     }
@@ -69,7 +69,7 @@ public class Vector {
         ));
     }
 
-
+ 
     public double length() {
         return Math.sqrt(lengthSquared());
     }
@@ -84,22 +84,17 @@ public class Vector {
     }
 
 
-
+   
     public Vector normalized() {
         Vector result = new Vector(_head);
         result.normalize();
         return result;
     }
 
-
+ 
     public Vector normalize() {
         double length = this.length();
 
-//      the following check is not necessary because there
-//      cannot be a ZERO vector
-//        //cannot divide by 0
-//        if (length == 0)
-//            throw new ArithmeticException("divide by Zero");
 
         double x = this._head._x._coord;
         double y = this._head._y._coord;
@@ -140,7 +135,7 @@ public class Vector {
                         scalar * _head._z._coord));
     }
 
-   
+
     public void rotateVector(Vector axis, double theta) {
         double x = this._head.getX();
         double y = this._head.getY();
