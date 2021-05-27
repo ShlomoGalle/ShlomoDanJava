@@ -60,7 +60,7 @@ public class CameraRayIntersectionsIntegrationTests {
         Camera cam2 = new Camera.BuilderCamera(new Point3D(0, 0, 0.5), new Vector(0, 0, -1), new Vector(0, -1, 0))
                 .build();
 
-        // TC01: Small Sphere 2 points
+        // TC01: Small Sphere 2 points  /////////rayon /////////coordonée///intersection exepected
         assertCountIntersections(cam1, new Sphere(1, new Point3D(0, 0, -3)), 2);
 
         // TC02: Big Sphere 18 points
@@ -79,6 +79,7 @@ public class CameraRayIntersectionsIntegrationTests {
     /**
      * Integration tests of Camera Ray construction with Ray-Plane intersections
      */
+    
     @Test
     public void cameraRayPlaneIntegration() {
         Camera cam = new Camera.BuilderCamera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, -1, 0))
