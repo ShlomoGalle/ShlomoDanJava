@@ -9,7 +9,7 @@ public abstract class RayTracerBase {
     protected Scene _scene;
 
     public RayTracerBase(Scene scene) {
-        _scene = scene;
+        this._scene = scene;
     }
 
     public abstract Color traceRay(Ray ray);

@@ -38,9 +38,9 @@ public class Render {
             if (_imageWriter == null) {
                 throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
             }
-            if (_scene == null) {
-                throw new MissingResourceException("missing resource", Scene.class.getName(), "");
-            }
+   //         if (_scene == null) {
+   //             throw new MissingResourceException("missing resource", Scene.class.getName(), "");
+   //         }
             if (_camera == null) {
                 throw new MissingResourceException("missing resource", Camera.class.getName(), "");
             }

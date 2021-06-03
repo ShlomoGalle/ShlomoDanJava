@@ -38,15 +38,6 @@ public class CameraRayIntersectionsIntegrationTests {
                 count += intersections == null ? 0 : intersections.size();
             }
         }
-
-        System.out.format("there is %d points:%n", count);
-        if (allpoints != null) {
-            for (var item : allpoints) {
-                System.out.println(item);
-            }
-        }
-        System.out.println();
-
         assertEquals(expected, count, "Wrong amount of intersections");
     }
 
