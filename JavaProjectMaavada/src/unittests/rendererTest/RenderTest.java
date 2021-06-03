@@ -74,7 +74,7 @@ public class RenderTest {
 						.setEmmission(new Color(java.awt.Color.RED)),
 				new Triangle(new Point3D(100, 0, -100), new Point3D(0, -100, -100), new Point3D(100, -100, -100)) // down right
 						.setEmmission(new Color(java.awt.Color.BLUE)));
-
+ 
         ImageWriter imageWriter = new ImageWriter("color render test", 1000, 1000);
         Render render = new Render() //
                 .setImageWriter(imageWriter) //
