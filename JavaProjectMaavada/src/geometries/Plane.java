@@ -19,8 +19,6 @@ public class Plane extends Geometry {
         return _q0;
     }
 
-
-    @Deprecated
     public Vector getNormal() {
         return _normal;
     }

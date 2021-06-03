@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 public interface Intersectable {
 	
 	public static class GeoPoint{
-		
+		public Geometry geometry;
+		public Point3D point;
 		
 		@Override
 		public boolean equals(Object o){
@@ -25,19 +26,18 @@ public interface Intersectable {
 			this.geometry = geometry;
 			this.point = point;
 		}
-		public Geometry geometry;
-		public Point3D point;
+
 	}
 	
-	default List<Point3D> findIntersections(Ray ray) {
-	    var geoList = findGeoIntersections(ray);
-	    return geoList == null ? null
-	                           : geoList
-	                           .stream()
-	                           .map(gp -> gp.point)
-	                           .collect(Collectors.toList());
-	}
+
+    List<GeoPoint> findGeoIntersections(Ray ray);
+    default List<Point3D> findIntersections(Ray ray) {
+        var geoList = findGeoIntersections(ray);
+        return geoList == null ? null
+                : geoList.stream().
+                map(gp -> gp.point)
+                .collect(Collectors.toList());
+    }
 
 	
-    List<GeoPoint> findGeoIntersections(Ray ray);
 }
