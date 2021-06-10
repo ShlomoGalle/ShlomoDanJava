@@ -5,6 +5,8 @@ import elements.LightSource;
 import geometries.Geometries;
 import primitives.Color;
 
+import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

@@ -2,11 +2,14 @@ package unittests.rendererTest;
 
 import elements.*;
 import geometries.*;
+
+import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
+
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
-
 
 public class RenderTest {
     private Camera camera = new Camera.BuilderCamera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0)) //
@@ -19,6 +22,8 @@ public class RenderTest {
     @Test
     public void basicRenderTwoColorTest() {
 
+    	
+    	
         Scene scene = new Scene("Test scene")//
 				.setAmbientLight(new AmbientLight(new Color(255, 191, 191), 1)) //
 				.setBackground(new Color(75, 127, 90));
@@ -32,7 +37,7 @@ public class RenderTest {
         ImageWriter imageWriter = new ImageWriter("base render test", 1000, 1000);
         Render render = new Render() //
                 .setImageWriter(imageWriter)
-                .setScene(scene)
+                //.setScene(scene)
                 .setCamera(camera)
                 .setRayTracer(new RayTracerBasic(scene));
 
@@ -59,6 +64,7 @@ public class RenderTest {
 //		render.writeToImage();
 //	}
 
+        
     
 	@Test
 	public void basicRenderMultiColorTest() {
@@ -74,13 +80,14 @@ public class RenderTest {
 						.setEmmission(new Color(java.awt.Color.RED)),
 				new Triangle(new Point3D(100, 0, -100), new Point3D(0, -100, -100), new Point3D(100, -100, -100)) // down right
 						.setEmmission(new Color(java.awt.Color.BLUE)));
- 
-        ImageWriter imageWriter = new ImageWriter("color render test", 1000, 1000);
+
+        ImageWriter imageWriter = new ImageWriter("color render test2", 1000, 1000);
         Render render = new Render() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
-                .setRayTracer(new RayTracerBasic(scene));
-
+                .setRayTracer(new RayTracerBasic(scene))
+                ;
+        	
         render.renderImage();
         render.printGrid(100, new Color(java.awt.Color.WHITE));
         render.writeToImage();
