@@ -1556,8 +1556,7 @@ public class Koumkoum {
 				new Triangle(pnts[469], pnts[468], pnts[528]).setEmmission(color).setMaterial(mat), //
 				new Triangle(pnts[528], pnts[529], pnts[469]).setEmmission(color).setMaterial(mat), //
 				new Triangle(pnts[470], pnts[469], pnts[529]).setEmmission(color).setMaterial(mat), //
-				new Triangle(pnts[529], pnts[530], pnts[470]).setEmmission(color).setMaterial(mat) //
-		);
+				new Triangle(pnts[529], pnts[530], pnts[470]).setEmmission(color).setMaterial(mat));
 		scene._lights.add(new PointLight(new Color(500, 500, 500), new Point3D(100, 0, -100)) //
 				.setkQ(0.000001));
 
