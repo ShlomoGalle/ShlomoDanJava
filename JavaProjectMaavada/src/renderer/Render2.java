@@ -13,27 +13,27 @@ public class Render2 {
     Camera _camera = null;
     RayTracerBase _rayTracerBase = null;
 
-    public Render setImageWriter(ImageWriter imageWriter) {
+    public Render2 setImageWriter(ImageWriter imageWriter) {
         _imageWriter = imageWriter;
         return this;
     }
 
-    public Render setScene(Scene scene) {
+    public Render2 setScene(Scene scene) {
         _scene = scene;
         return this;
     }
 
-    public Render setCamera(Camera camera) {
+    public Render2 setCamera(Camera camera) {
         _camera = camera;
         return this;
     }
 
-    public Render setRayTracer(RayTracerBase rayTracer) {
+    public Render2 setRayTracer(RayTracerBase rayTracer) {
         _rayTracerBase = rayTracer;
         return this;
     }
 
-    public void renderImage() {
+    public void Render2Image() {
         try {
             if (_imageWriter == null) {
                 throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
@@ -48,7 +48,7 @@ public class Render2 {
                 throw new MissingResourceException("missing resource", RayTracerBase.class.getName(), "");
             }
 
-            //rendering the image
+            //Render2ing the image
             int nX = _imageWriter.getNx();
             int nY = _imageWriter.getNy();
             for (int i = 0; i < nY; i++) {
