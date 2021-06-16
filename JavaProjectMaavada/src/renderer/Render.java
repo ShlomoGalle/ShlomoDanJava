@@ -2,8 +2,11 @@ package renderer;
 
 import elements.Camera;
 import primitives.Color;
+import primitives.Point3D;
 import primitives.Ray;
+import primitives.Vector;
 import scene.Scene;
+import static primitives.Ray.rayRandomBeam;
 
 import java.util.MissingResourceException;
 
@@ -24,9 +27,11 @@ public class Render {
 	private static final String CAMERA_COMPONENT = "Camera";
 	private static final String RAY_TRACER_COMPONENT = "Ray tracer";
 
+	
 	private int threadsCount = 0;
 	private static final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
 	private boolean print = false; // printing progress percentage
+    private boolean flagDOP = false;
 
 	/**
 	 * Set multi-threading <br>
@@ -35,6 +40,12 @@ public class Render {
 	 * @param threads number of threads
 	 * @return the Render object itself
 	 */
+	
+    public Render setFlagDOP(boolean flagDOP) {
+        this.flagDOP = flagDOP;
+        return this;
+    }
+    
 	public Render setMultithreading(int threads) {
 		if (threads < 0)
 			throw new IllegalArgumentException("Multithreading parameter must be 0 or higher");
@@ -90,6 +101,7 @@ public class Render {
 			this.nextCounter = this.pixels / 100;
 			if (Render.this.print)
 				System.out.printf("\r %02d%%", this.percents);
+			
 		}
 
 		/**
@@ -98,6 +110,14 @@ public class Render {
 		public Pixel() {
 		}
 
+        public void setCounter(long counter) {
+            this.counter = counter;
+        }
+
+        public long getCounter() {
+            return counter;
+        }
+        
 		/**
 		 * Internal function for thread-safe manipulating of main follow up Pixel object
 		 * - this function is critical section for all the threads, and main Pixel
@@ -110,6 +130,9 @@ public class Render {
 		 *         if it is -1 - the task is finished, any other value - the progress
 		 *         percentage (only when it changes)
 		 */
+		
+
+		
 		private synchronized int nextP(Pixel target) {
 			++col;
 			++this.counter;
@@ -220,54 +243,125 @@ public class Render {
 
 		imageWriter.writeToImage();
 	}
+	
+    private void castRay(int nX, int nY, int col, int row) {
+        Pixel pixel = new Pixel();
+        pixel.row = row;
+        pixel.col = col;
 
-	/**
-	 * Cast ray from camera in order to color a pixel
-	 * @param nX resolution on X axis (number of pixels in row)
-	 * @param nY resolution on Y axis (number of pixels in column)
-	 * @param col pixel's column number (pixel index in row)
-	 * @param row pixel's row number (pixel index in column)
-	 */
-	private void castRay(int nX, int nY, int col, int row) {
-		Ray ray = camera.constructRayThroughPixel(nX, nY, col, row);
-		Color color = tracer.traceRay(ray);
-		imageWriter.writePixel(col, row, color);
-	}
+        if (flagDOP == true) {
+            Ray ray = camera.constructRayThroughPixel(nX, nY, col, row);
+            imageWriter.writePixel(col, row, superSampling(ray, pixel));
+        } else {
+
+            Ray ray = camera.constructRayThroughPixel(nX, nY, col, row);
+            Color color = tracer.traceRay(ray);
+            imageWriter.writePixel(col, row, color);
+        }
+    }
+
+	
+    public Color superSampling(Ray ray, Pixel pixel) {
+        if (camera.getNumOfRays() <= 1)
+            return tracer.traceRay(ray);
+
+        Color result = new Color(0, 0, 0);
+        Point3D pij = ray.getPoint(camera.getDistance() / (camera.getvTo().dotProduct(ray.getDirection())));
+        Point3D f = ray.getPoint((camera.getFocalDistance() + camera.getDistance()) / (camera.getvTo().dotProduct(ray.getDirection())));//focal point
+        Color color = rec(camera.getAperture(), camera.getNumOfRays(), pij, f, 3, pixel);
+        result = result.add(/*tracer.traceRay(ray)*/color.reduce(pixel.counter));
+        return result;
+    }
+    
+    
+    private Color rec(double radius, int num, Point3D center, Point3D target, int k, Pixel pixel) {
+        Vector up = camera.getvUp();
+        Vector right = camera.getvRight();
+        double move = radius / 1.414;
+        Color colorA = tracer.traceRay(new Ray(center.add(up.scale(radius)), target.subtract(center.add(up.scale(radius)))));
+        Color colorB = tracer.traceRay(new Ray(center.add(right.scale(radius)), target.subtract(center.add(right.scale(radius)))));
+        Color colorC = tracer.traceRay(new Ray(center.add(up.scale(-radius)), target.subtract(center.add(up.scale(-radius)))));
+        Color colorD = tracer.traceRay(new Ray(center.add(right.scale(-radius)), target.subtract(center.add(right.scale(-radius)))));
+        Color colorAB = tracer.traceRay(new Ray(center.add(up.scale(move)).add(right.scale(move)), target.subtract(center.add(up.scale(move)).add(right.scale(move)))));
+        Color colorBC = tracer.traceRay(new Ray(center.add(up.scale(-move)).add(right.scale(move)), target.subtract(center.add(up.scale(-move)).add(right.scale(move)))));
+        Color colorCD = tracer.traceRay(new Ray(center.add(up.scale(-move)).add(right.scale(-move)), target.subtract(center.add(up.scale(-move)).add(right.scale(-move)))));
+        Color colorDA = tracer.traceRay(new Ray(center.add(up.scale(move)).add(right.scale(-move)), target.subtract(center.add(up.scale(move)).add(right.scale(-move)))));
+        Color centerColor = tracer.traceRay(new Ray(center, target.subtract(center)));
+
+        Color result = new Color(centerColor);
+        result = result.add(colorA, colorB, colorC, colorD, colorAB, colorBC, colorCD, colorDA);
+        num = num - 9;
+        pixel.setCounter(pixel.getCounter() + 9);
+
+        if (k == 0 || num <= 36) {
+            pixel.setCounter(pixel.getCounter() + num);
+            result = tracer.traceRay(rayRandomBeam(center, target, radius, num, right, up));
+            return result;
+        }
+        double newRad = radius / (2.414213562);         //R=r(1+sqrt(2)
+        if (!(colorA.equals(centerColor)) || !(colorAB.equals(centerColor)) || !(colorDA.equals(centerColor)))
+            result = result.add(rec(newRad, (num / 4), center.add(up.scale(radius - newRad)), target, k - 1, pixel));
+        else {
+            result = result.add(colorA.scale(num / 4));
+            pixel.setCounter(pixel.getCounter() + num / 4);
+        }
+        if (!colorB.equals(centerColor) || !colorBC.equals(centerColor) || !colorAB.equals(centerColor))
+            result = result.add(rec(newRad, num / 4, center.add(right.scale(radius - newRad)), target, k - 1, pixel));
+        else {
+            result = result.add(colorB.scale(num / 4));
+            pixel.setCounter(pixel.getCounter() + num / 4);
+        }
+        if (!colorC.equals(centerColor) || !colorCD.equals(centerColor) || !colorBC.equals(centerColor))
+            result = result.add(rec(newRad, num / 4, center.add(up.scale(-(radius - newRad))), target, k - 1, pixel));
+        else {
+            result = result.add(colorC.scale(num / 4));
+            pixel.setCounter(pixel.getCounter() + num / 4);
+        }
+        if (!colorD.equals(centerColor) || !colorDA.equals(centerColor) || !colorCD.equals(centerColor))
+            result = result.add(rec(newRad, num / 4, center.add(right.scale(-(radius - newRad))), target, k - 1, pixel));
+        else {
+            result = result.add(colorD.scale(num / 4));
+            pixel.setCounter(pixel.getCounter() + num / 4);
+        }
+
+        return result;
+    }
+
 
 	/**
 	 * This function renders image's pixel color map from the scene included with
 	 * the Renderer object - with multi-threading
 	 */
 	private void renderImageThreaded() {
-		final int nX = imageWriter.getNx();
-		final int nY = imageWriter.getNy();
-		final Pixel thePixel = new Pixel(nY, nX);
-		// Generate threads
-		Thread[] threads = new Thread[threadsCount];
-		for (int i = threadsCount - 1; i >= 0; --i) {
-			threads[i] = new Thread(() -> {
-				Pixel pixel = new Pixel();
-				while (thePixel.nextPixel(pixel))
-					castRay(nX, nY, pixel.col, pixel.row);
-			});
-		}
-		// Start threads
-		for (Thread thread : threads)
-			thread.start();
+        final int nX = imageWriter.getNx();
+        final int nY = imageWriter.getNy();
+        final Pixel thePixel = new Pixel(nY, nX);
+        // Generate threads
+        Thread[] threads = new Thread[threadsCount];
+        for (int i = threadsCount - 1; i >= 0; --i) {
+            threads[i] = new Thread(() -> {
+                Pixel pixel = new Pixel();
+                while (thePixel.nextPixel(pixel))
+                    castRay(nX, nY, pixel.col, pixel.row);
+            });
+        }
+        // Start threads
+        for (Thread thread : threads)
+            thread.start();
 
-		// Print percents on the console
-		thePixel.print();
+        // Print percents on the console
+        thePixel.print();
 
-		// Ensure all threads have finished
-		for (Thread thread : threads)
-			try {
-				thread.join();
-			} catch (Exception e) {
-			}
+        // Ensure all threads have finished
+        for (Thread thread : threads)
+            try {
+                thread.join();
+            } catch (Exception e) {
+            }
 
-		if (print)
-			System.out.print("\r100%");
-	}
+        if (print)
+            System.out.print("\r100%");
+    }
 
 	/**
 	 * This function renders image's pixel color map from the scene included with

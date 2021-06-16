@@ -1,5 +1,6 @@
 package primitives;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import geometries.Intersectable.GeoPoint;
@@ -18,6 +19,7 @@ public class Ray {
 
     public Ray(Point3D point3D, Vector lightDirection, Vector n) {
         Vector delta = n.scale(n.dotProduct(lightDirection)>0?DELTA: -DELTA);
+        Point3D p = point3D.add(delta);
         _pOrigin = point3D.add(delta);
         _direction = lightDirection.normalized();
     }
@@ -71,6 +73,20 @@ public class Ray {
             }
         }
         return nearPoint;
+    }
+    
+    public static List<Ray> rayRandomBeam(Point3D center, Point3D target, double rad, int numOfRays, Vector vRight, Vector vUp) {
+        List<Ray> result = new LinkedList<>();
+        for (int k = 0; k < numOfRays; k++) {
+            double x = Math.random() * 2 * rad + rad;
+            double cosX = Math.sqrt(rad - x * x);
+            double y = Math.random() * 2 * cosX + cosX;
+            Point3D pC = center.add(vRight.scale(x));//a point on view plane around the pixel
+            pC = pC.add(vUp.scale(y));
+            Ray focalRay = new Ray(pC, target.subtract(pC));
+            result.add(focalRay);
+        }
+        return result;
     }
 
     @Override

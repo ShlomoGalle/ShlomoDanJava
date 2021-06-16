@@ -17,8 +17,7 @@ public class Koumkoum {
 	private final Camera camera = new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, 1, 0)) //
 			.setDistance(1000)            
 			.setViewPlaneHeight(500)
-            .setViewPlaneWidth(500)
-            .setDepthOfFiled(10, 0.3, 200);
+            .setViewPlaneWidth(500);
 
 	
 	private final Scene scene = new Scene("Test scene");
@@ -1565,8 +1564,7 @@ public class Koumkoum {
 				.setCamera(camera) //
 				.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene)) //
-				.setMultithreading(3).setDebugPrint()
-				.setFlagDOP(true);
+				.setMultithreading(3).setDebugPrint();
 
 		render.renderImage();
 		render.printGrid(50, new Color(java.awt.Color.YELLOW));

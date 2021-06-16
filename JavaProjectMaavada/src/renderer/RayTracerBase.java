@@ -13,7 +13,8 @@ public abstract class RayTracerBase {
     public RayTracerBase(Scene scene) {
         this._scene = scene;
     }
-
+    
     public abstract Color traceRay(Ray ray);
+    public abstract Color traceRay(List<Ray> rays);
 
 }	

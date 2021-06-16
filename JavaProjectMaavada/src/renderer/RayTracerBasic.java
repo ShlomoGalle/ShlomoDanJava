@@ -6,6 +6,7 @@ import geometries.Intersectable.GeoPoint;
 
 import static geometries.Intersectable.GeoPoint;
 import static primitives.Util.*;
+import static primitives.Ray.rayRandomBeam;
 
 import java.util.List;
 
@@ -31,6 +32,16 @@ public class RayTracerBasic extends RayTracerBase {
         }
         return _scene._background;
     }
+    
+    @Override
+    public Color traceRay(List<Ray> rays) {
+        Color color = new Color(_scene._background);
+        for (Ray ray : rays) {
+            color = color.add(traceRay(ray));
+        }
+        color = color.scale(rays.size());
+        return color;
+    }
 
     /**
      * @param point
@@ -41,8 +52,8 @@ public class RayTracerBasic extends RayTracerBase {
        //         .add(point.geometry.getEmmission()
        //                 .add(calcLocalEffects(point, ray)));
         
-        return calcColor(point, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K).add(_scene._ambientlight.getIntensity());
-
+        return calcColor(point, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
+                .add(_scene._ambientlight.getIntensity());
     }
     
     private  Color calcColor(GeoPoint intersection,Ray ray, int level, double k) {
@@ -140,6 +151,7 @@ public class RayTracerBasic extends RayTracerBase {
         List<GeoPoint> geoPoints = _scene._geometries.findGeoIntersections(ray);
         return ray.findClosestGeoPoint(geoPoints);
     }
+    
     
     private double transparency(LightSource ls, Vector l, Vector n, GeoPoint intersection) {
         Point3D point = intersection.point;

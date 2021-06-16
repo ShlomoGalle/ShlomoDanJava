@@ -20,6 +20,9 @@ import javax.imageio.*;
 public class ImageWriter {
     private int nX;
     private int nY;
+    
+    private double imageWidth;
+    private double imageHeight;
 
     private static final String FOLDER_PATH = System.getProperty("user.dir") + "/images";
 
@@ -65,6 +68,16 @@ public class ImageWriter {
         return nX;
     }
 
+    
+    public double getWidth() {
+        return imageWidth;
+    }
+
+    public double getHeight() {
+        return imageHeight;
+    }
+    
+    
     // ***************** Operations ******************** //
 
     /**
