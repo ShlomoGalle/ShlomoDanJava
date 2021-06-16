@@ -15,11 +15,10 @@ import scene.Scene;
  */
 public class ShadowTests {
 	private Scene scene = new Scene("Test scene");
-	private Camera camera = new Camera.BuilderCamera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+	private Camera camera = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 			.setDistance(1000)//
 			.setViewPlaneHeight(200)
-			.setViewPlaneWidth(200)
-			.build();
+			.setViewPlaneWidth(200);
 	/**
 	 * Produce a picture of a sphere and triangle with point light and shade
 	 */

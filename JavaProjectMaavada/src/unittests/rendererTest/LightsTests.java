@@ -17,17 +17,15 @@ public class LightsTests {
 	private Scene scene1 = new Scene("Test scene");
 	private Scene scene2 = new Scene("Test scene") //
 			.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-	private Camera camera1 = new Camera.BuilderCamera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0))
+	private Camera camera1 = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0))
 			.setDistance(1000)//
 			.setViewPlaneHeight(150)
-            .setViewPlaneWidth(150)
-            .build();
-
-	private Camera camera2 = new Camera.BuilderCamera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+            .setViewPlaneWidth(150);
+	
+	private Camera camera2 = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 			.setDistance(1000)//
 			.setViewPlaneHeight(200)
-            .setViewPlaneWidth(200)
-            .build();
+            .setViewPlaneWidth(200);
 
 	private static Geometry triangle1 = new Triangle( //
 			new Point3D(-150, -150, -150), new Point3D(150, -150, -150), new Point3D(75, 75, -150));

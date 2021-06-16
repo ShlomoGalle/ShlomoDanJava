@@ -14,11 +14,11 @@ import scene.Scene;
  * @author Dan
  */
 public class Koumkoum {
-	private final Camera camera = new Camera.BuilderCamera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, 1, 0)) //
+	private final Camera camera = new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, 1, 0)) //
 			.setDistance(1000)            
 			.setViewPlaneHeight(500)
             .setViewPlaneWidth(500)
-            .build();
+            .setDepthOfFiled(10, 0.3, 200);
 
 	
 	private final Scene scene = new Scene("Test scene");
@@ -1560,12 +1560,14 @@ public class Koumkoum {
 		scene._lights.add(new PointLight(new Color(500, 500, 500), new Point3D(100, 0, -100)) //
 				.setkQ(0.000001));
 
-		ImageWriter imageWriter = new ImageWriter("teapot", 800, 800);
+		ImageWriter imageWriter = new ImageWriter("teapotWithSuperSampling", 800, 800);
 		Render render = new Render() //
 				.setCamera(camera) //
 				.setImageWriter(imageWriter) //
 				.setRayTracer(new RayTracerBasic(scene)) //
-				.setMultithreading(3).setDebugPrint();
+				.setMultithreading(3).setDebugPrint()
+				.setFlagDOP(true);
+
 		render.renderImage();
 		render.printGrid(50, new Color(java.awt.Color.YELLOW));
 		render.writeToImage();

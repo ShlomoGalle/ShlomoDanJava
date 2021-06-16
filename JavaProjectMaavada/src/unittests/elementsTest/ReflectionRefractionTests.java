@@ -26,11 +26,10 @@ public class ReflectionRefractionTests {
 	 */
 	@Test
 	public void twoSpheres() {
-		Camera camera = new Camera.BuilderCamera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+		Camera camera = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 				.setDistance(1000)//
 				.setViewPlaneHeight(150)
-	            .setViewPlaneWidth(150)
-	            .build();
+	            .setViewPlaneWidth(150);
 
 		scene._geometries.add( //
 				new Sphere(50, new Point3D(0, 0, -50)) //
@@ -56,11 +55,11 @@ public class ReflectionRefractionTests {
 	 */
 	@Test
 	public void twoSpheresOnMirrors() {
-		Camera camera = new Camera.BuilderCamera(new Point3D(0, 0, 10000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+		Camera camera = new Camera(new Point3D(0, 0, 10000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 				.setDistance(10000)//
 				.setViewPlaneHeight(2500)
-				.setViewPlaneWidth(2500)
-				.build();
+				.setViewPlaneWidth(2500);
+		
 		scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.1));
 
 		scene._geometries.add( //
@@ -98,11 +97,11 @@ public class ReflectionRefractionTests {
 	 */
 	@Test
 	public void trianglesTransparentSphere() {
-		Camera camera = new Camera.BuilderCamera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+		Camera camera = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
 				.setDistance(1000)//
 				.setViewPlaneHeight(200)
-				.setViewPlaneWidth(200)
-				.build();
+				.setViewPlaneWidth(200);
+		
 		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
 
 		scene._geometries.add( //

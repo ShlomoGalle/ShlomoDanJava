@@ -12,11 +12,10 @@ import renderer.*;
 import scene.Scene;
 
 public class RenderTest {
-    private Camera camera = new Camera.BuilderCamera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+    private Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0)) //
             .setDistance(100) //
             .setViewPlaneHeight(500)
-            .setViewPlaneWidth(500)
-            .build();
+            .setViewPlaneWidth(500);
 
  
     @Test
@@ -81,7 +80,8 @@ public class RenderTest {
 				new Triangle(new Point3D(100, 0, -100), new Point3D(0, -100, -100), new Point3D(100, -100, -100)) // down right
 						.setEmmission(new Color(java.awt.Color.BLUE)));
 
-        ImageWriter imageWriter = new ImageWriter("color render test2", 1000, 1000);
+        ImageWriter imageWriter = new ImageWriter("color render test", 1000, 1000);
+        
         Render render = new Render() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //

@@ -20,30 +20,28 @@ public class Camera {
     private double _aperture;
     private int _numOfRays;
     
-    
-   
-
-
-    /**
-     *
-     * @param p0 location of the camera
-     * @param vUp y
-     * @param vTo z
-     */
-    public Camera(Point3D p0, Vector vTo,  Vector vUp) {
-        _p0 = p0;
-        _vUp = vUp.normalized();
-        _vTo = vTo.normalized();
-        if(!isZero(vUp.dotProduct(vTo))){
-            throw new IllegalArgumentException("Vectors are not ortogonal.");
-        }
-        _vRight=_vTo.crossProduct(_vUp);
+    private Camera(BuilderCamera builder) {
+        _p0 = builder._p0;
+        _vTo = builder._vTo;
+        _vUp = builder._vUp;
+        _vRight = builder._vRight;
+        _height = builder._height;
+        _width = builder._width;
+        _distance = builder._distance;
     }
 
-    /**
-     * getters
-     * @return vUp, vTo, vRight, Aperture, NumOfRays, FocalDistance
-     */
+    //Camera setter chaining methods
+    public Camera setDistance(double distance) {
+        _distance = distance;
+        return this;
+    }
+
+    public Camera setViewPlaneSize(double width, double height) {
+        _width = width;
+        _height = height;
+        return this;
+    }
+
     public Vector getvUp() {
         return _vUp;
     }
@@ -68,6 +66,11 @@ public class Camera {
         return _focalDistance;
     }
 
+    public double getDistance() {
+        return _distance;
+    }
+    
+    //Camera getters methods
     public double getWidth() {
         return _width;
     }
@@ -75,51 +78,8 @@ public class Camera {
     public double getHeight() {
         return _height;
     }
-
-    public double getDistance() {
-        return _distance;
-    }
     
-    /**
-     * borrowing from Builder pattern
-     * @param width
-     * @param height
-     * @return
-     */
-    public Camera setViewPlaneSize(double width, double height){
-        _width=width;
-        _height=height;
-        return this;
-    }
-
-    public Camera setDistance(double distance){
-        _distance=distance;
-        return this;
-    }
-
-    /**
-     * setter of Depth of filed. if Depth of filed function is called the camera will be focused for a specific distance.
-     * if Depth of filed will not be called the camera will be focused on the whole scene equally.
-     *
-     * @param focalDistance - the distance of the  focus.
-     * @param aperture      - the radius of the aperture.
-     * @param numOfRays     - number of rays that will be in the beam from every pixels area (in addition to the original ray).
-     */
-    public Camera setDepthOfFiled(double focalDistance, double aperture, int numOfRays) {
-        _focalDistance = focalDistance;
-        _aperture = aperture;
-        _numOfRays = numOfRays;
-        return this;
-    }
-
-    /**
-     * Constructing a ray through a pixel
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @return the ray
-     */
+    // constructing a ray passing through pixel(i,j) of the view plane
     public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
         Point3D Pc = _p0.add(_vTo.scale(_distance));
 
@@ -166,15 +126,62 @@ public class Camera {
         return this;
     }
 
-    public Camera setViewPlaneWidth(double width) {
-        _width = width;
-        return this;
-    }
 
-    public Camera setViewPlaneHeight(double height) {
-        _height = height;
-        return this;
-    }
+    public static class BuilderCamera {
+        final private Point3D _p0;
+        final private Vector _vTo;
+        final private Vector _vUp;
+        final private Vector _vRight;
 
+        private double _distance = 10;
+        private double _width = 1;
+        private double _height = 1;
+        
+        private double _focalDistance = 1;
+        private double _aperture = 0.3;
+        private int _numOfRays = 200;
+
+        public BuilderCamera setDistance(double distance) {
+            _distance = distance;
+            return this;
+        }
+
+
+        public BuilderCamera setViewPlaneWidth(double width) {
+            _width = width;
+            return this;
+        }
+
+        public BuilderCamera setViewPlaneHeight(double height) {
+            _height = height;
+            return this;
+        }
+
+        public Camera build() {
+            Camera camera = new Camera(this);
+            return camera;
+        }
+
+        public BuilderCamera(Point3D p0, Vector vTo, Vector vUp) {
+            _p0 = p0;
+
+            if (!isZero(vTo.dotProduct(vUp))) {
+                throw new IllegalArgumentException("vto and vup are not orthogonal");
+            }
+
+            _vTo = vTo.normalized();
+            _vUp = vUp.normalized();
+
+            _vRight = _vTo.crossProduct(_vUp);
+
+        }
+        
+        public BuilderCamera setDepthOfFiled(double focalDistance, double aperture, int numOfRays) {
+            _focalDistance = focalDistance;
+            _aperture = aperture;
+            _numOfRays = numOfRays;
+            return this;
+        }
+    }
 
 }
