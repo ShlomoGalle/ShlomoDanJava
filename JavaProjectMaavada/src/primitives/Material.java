@@ -4,6 +4,8 @@ public class Material {
     public double kD = 0;
     public double kS = 0;
     public int nShininess = 0;
+    public double kT = 0;
+    public double kR = 0;
 
 
     public Material setkD(double kD) {
@@ -23,6 +25,26 @@ public class Material {
         this.nShininess = nShininess;
         return this;
 
+    }
+    
+    
+
+    public Material setkR(double kR) {
+        this.kR = kR;
+        return this;
+    }
+
+    public Material setkT(double kT) {
+        this.kT = kT;
+        return this;
+    }
+
+    public double getkR() {
+        return kR;
+    }
+
+    public double getkT() {
+        return kT;
     }
 
 

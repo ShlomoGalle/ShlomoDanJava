@@ -38,6 +38,7 @@ public interface Intersectable {
                 map(gp -> gp.point)
                 .collect(Collectors.toList());
     }
+    List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance);
 
 	
 }

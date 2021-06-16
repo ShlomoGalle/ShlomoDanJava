@@ -98,4 +98,36 @@ public class Plane extends Geometry {
 
 	        return List.of(new GeoPoint(this, point));
 	}
+	
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray,double maxDistance) {
+        Point3D p0 = ray.getP0();
+        Vector v = ray.getDirection();
+
+        //ray is the starting point.
+        if (_q0.equals(p0)) {
+            return null;
+        }
+
+        double nv = alignZero(_normal.dotProduct(v));
+
+        //the ray is lying on the plane
+        if (isZero(nv)) {
+            return null;
+        }
+
+        double t = alignZero(_normal.dotProduct(_q0.subtract(p0)));
+        t =alignZero(t/nv);
+
+        //t is on the exiting point on the plane or outside of it.
+        if (t <= 0) {
+            return null;
+        }
+
+        if(alignZero(t - maxDistance)<=0){
+            Point3D p = ray.getPoint(t);
+            return List.of(new GeoPoint(this,p));
+        }
+        return null;
+    }
 }

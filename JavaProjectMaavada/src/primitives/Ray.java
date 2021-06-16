@@ -9,12 +9,19 @@ import static primitives.Util.isZero;
 public class Ray {
     final  Point3D _pOrigin;
     final Vector _direction;
+    private static final double DELTA = 0.1;
 
     public Ray(Point3D pOrigin, Vector direction) {
         _pOrigin = pOrigin;
         _direction = direction.normalized();
     }
 
+    public Ray(Point3D point3D, Vector lightDirection, Vector n) {
+        Vector delta = n.scale(n.dotProduct(lightDirection)>0?DELTA: -DELTA);
+        _pOrigin = point3D.add(delta);
+        _direction = lightDirection.normalized();
+    }
+    
     public Point3D getP0() {
         return _pOrigin;
     }

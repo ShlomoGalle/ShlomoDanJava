@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
@@ -192,5 +193,52 @@ public class Polygon extends Geometry {
 		return result;
 
 	}
+	
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray,double maxDistance) {
+        List<GeoPoint> planeIntersection=_plane.findGeoIntersections(ray,maxDistance);
+        Plane plane = new Plane(_vertices.get(0), _vertices.get(1), _vertices.get(2));
+        // check for intersection point
+        if (planeIntersection != null) {
+
+
+            //check for intersections with angles using a scalar product between the Ray and the normal
+
+            // Ray head
+            Point3D P0 = ray.getP0();
+            // ray intersection vector
+            Vector v = plane.findGeoIntersections(ray,maxDistance).get(0).point.subtract(P0);
+
+            LinkedList<Vector> vectorList = new LinkedList<>();
+            //the vectors between the head of the ray and the vertices of the polygon.
+            for (Point3D point3D : _vertices) {
+                vectorList.add(point3D.subtract(P0));
+            }
+
+            LinkedList<Vector> normalList = new LinkedList<>();
+            //the normals from between every two adjacent vectors.
+            for (int i = 0; i < vectorList.size() - 1; i++) {
+                normalList.add(vectorList.get(i).crossProduct(vectorList.get(i + 1)));
+            }
+
+            //last normal from between first and last vector in the list.
+            normalList.add(vectorList.get(vectorList.size() - 1).crossProduct(vectorList.get(0)));
+
+            boolean flag = true;
+            boolean flag1 = true;
+            //check the type of angle between the normal and the ray.
+            for (Vector normal : normalList) {
+                if (alignZero(v.dotProduct(normal)) <= 0) {
+                    flag = false;
+                }
+                if (alignZero(v.dotProduct(normal)) >= 0) {
+                    flag1 = false;
+                }
+            }
+            if (flag || flag1) {
+                return List.of(new GeoPoint(this,planeIntersection.get(0).point));
+            }
+        }
+        return null;    }
 	
 }

@@ -49,4 +49,9 @@ public class NarrowLight extends Light implements LightSource {
         return p.subtract(position).normalize();
 
     }
+    
+    @Override
+    public double getDistance(Point3D point3D) {
+        return Double.POSITIVE_INFINITY;
+    }
 }
